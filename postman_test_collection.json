@@ -1,0 +1,442 @@
+{
+	"info": {
+		"_postman_id": "d1042b3a-49ff-48af-9255-3bdf99948af3",
+		"name": "Pet endpoints functionality",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "15767614"
+	},
+	"item": [
+		{
+			"name": "Positive tests",
+			"item": [
+				{
+					"name": "Create a new valid pet",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// Extract response body as JSON",
+									"var jsonData = pm.response.json();",
+									"",
+									"// Verify that the response body contains the correct id",
+									"pm.test(\"Response body has correct pet id\", function () {",
+									"    pm.expect(jsonData.id).to.eql(parseInt(pm.environment.get(\"petId\")));",
+									"});",
+									"",
+									"// Verify that the response body contains the correct name",
+									"pm.test(\"Response body has correct pet name\", function () {",
+									"    pm.expect(jsonData.name).to.eql(pm.environment.get(\"petName\"));",
+									"});",
+									"",
+									"// Verify that the response body has the correct category",
+									"pm.test(\"Response body has correct category\", function () {",
+									"    pm.expect(jsonData.category.name).to.eql(\"Dogs\");",
+									"});",
+									"",
+									"// Verify that the status is 'available'",
+									"pm.test(\"Response body has correct status\", function () {",
+									"    pm.expect(jsonData.status).to.eql(\"available\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Generate a random ID between 1000 and 9999",
+									"var randomId = Math.floor(Math.random() * 9000) + 1000;",
+									"pm.environment.set(\"petId\", randomId);",
+									"",
+									"// Generate a random name",
+									"var randomName = \"Pet\" + Math.floor(Math.random() * 10000);",
+									"pm.environment.set(\"petName\", randomName);",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"connection": true,
+							"accept-encoding": true,
+							"user-agent": true,
+							"host": true,
+							"accept": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"{{petId}}\",\n  \"name\": \"{{petName}}\",\n  \"category\": {\n    \"id\": 1,\n    \"name\": \"Dogs\"\n  },\n  \"photoUrls\": [\"http://example.com/photo1\"],\n  \"tags\": [{\n    \"id\": 1,\n    \"name\": \"tag1\"\n  }],\n  \"status\": \"available\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/pet",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"pet"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find pets by valid status(es)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/pet/findByStatus?status=available,pending,sold",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"pet",
+								"findByStatus"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "available,pending,sold"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a pet in the store with form data",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/pet/9223372036854775046",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"pet",
+								"9223372036854775046"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a pet",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/pet/9223372036854775046",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"pet",
+								"9223372036854775046"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update an existing pet",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": 0,\n  \"category\": {\n    \"id\": 0,\n    \"name\": \"string\"\n  },\n  \"name\": \"doggie\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ],\n  \"status\": \"available\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/pet",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"pet"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Negative tests",
+			"item": [
+				{
+					"name": "Create a new pet - invalid input",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Generate a random ID between 1000 and 9999",
+									"var randomId = Math.floor(Math.random() * 9000) + 1000;",
+									"pm.environment.set(\"petId\", randomId);",
+									"",
+									"// Generate a random name",
+									"var randomName = \"Pet\" + Math.floor(Math.random() * 10000);",
+									"pm.environment.set(\"petName\", randomName);",
+									"",
+									"console.log(\"Generated petId: \" + randomId);",
+									"console.log(\"Generated petName: \" + randomName);",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 405\", function () {",
+									"    pm.response.to.have.status(405);",
+									"});",
+									"",
+									"pm.test(\"Invalid input\", function () {",
+									"    var responseBody = pm.response.json();",
+									"});",
+									"",
+									"/*",
+									"pm.test(\"Invalid input\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.message).to.include(\"name\");",
+									"});",
+									"*/"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"{{petId}}\",\n  \"category\": {\n    \"id\": 1,\n    \"name\": \"Dogs\"\n  },\n  \"photoUrls\": [\"http://example.com/photo1\"],\n  \"tags\": [{\n    \"id\": 1,\n    \"name\": \"tag1\"\n  }],\n  \"status\": \"available\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/pet",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"pet"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find pets by status - invalid status value",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/pet/findByStatus?status=sold_out",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"pet",
+								"findByStatus"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "sold_out"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a pet in the store - invalid request",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://petstore.swagger.io/v2/pet/",
+							"protocol": "https",
+							"host": [
+								"petstore",
+								"swagger",
+								"io"
+							],
+							"path": [
+								"v2",
+								"pet",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a pet invalid request",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://petstore.swagger.io/v2/pet/000",
+							"protocol": "https",
+							"host": [
+								"petstore",
+								"swagger",
+								"io"
+							],
+							"path": [
+								"v2",
+								"pet",
+								"000"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update an existing pet - invalid request",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": 0000,\n  \"category\": {\n    \"id\": 0,\n    \"name\": \"string\"\n  },\n  \"name\": \"doggie\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ],\n  \"status\": \"available\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://petstore.swagger.io/v2/pet",
+							"protocol": "https",
+							"host": [
+								"petstore",
+								"swagger",
+								"io"
+							],
+							"path": [
+								"v2",
+								"pet"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "https://petstore.swagger.io/v2",
+			"type": "string"
+		},
+		{
+			"key": "pet_id",
+			"value": "{{$randomInt}}",
+			"type": "string",
+			"disabled": true
+		}
+	]
+}
