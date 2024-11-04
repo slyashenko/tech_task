@@ -4,12 +4,9 @@ from pages.base_page import BasePage
 
 class HomePage(BasePage):
     # Locators for the navigation and Careers page sections
-    COMPANY_MENU = (By.LINK_TEXT, "Company")
-    CAREERS_LINK = (By.LINK_TEXT, "Careers")
-    LOCATIONS_SECTION = (By.CSS_SELECTOR, ".career-location")
-    TEAMS_SECTION = (By.CSS_SELECTOR, ".career-team")
-    LIFE_AT_INSIDER_SECTION = (By.CSS_SELECTOR, ".life-at-insider")
-
+    COMPANY_MENU = (By.XPATH, "//*[@id='navbarDropdownMenuLink' and contains(., 'Company')]")
+    CAREERS_LINK = (By.XPATH, "//*[@id='navbarDropdownMenuLink' and contains(., 'Company')]/following-sibling::div//a[text()='Careers']")
+   
     def open_company_menu(self):
         self.close_notifications_popup()  # Ensure popup is closed
         self.click(self.COMPANY_MENU)

@@ -4,12 +4,14 @@ from pages.base_page import BasePage
 
 class CareersPage(BasePage):
     # Updated Locators for section headers using XPath for text matching
-    LOCATIONS_HEADER = (By.XPATH, "//h3[contains(text(), 'Our Locations')]")  # Locator for "Our Locations"
-    TEAMS_HEADER = (By.XPATH, "//h3[contains(text(), 'Find your calling')]")  # Locator for "Find Your Calling"
-    LIFE_AT_INSIDER_HEADER = (By.XPATH, "//h2[contains(text(), 'Life at Insider')]")  # Locator for "Life at Insider"
+    LOCATIONS_HEADER = (By.XPATH, "//*[@id='career-our-location']//*[contains(text(), 'Our Locations')]")  # Locator for "Our Locations"
+    TEAMS_HEADER = (By.XPATH, "//*[@id='career-find-our-calling']//*[contains(text(), 'Find your calling')]")  # Locator for "Find Your Calling"
+    LIFE_AT_INSIDER_HEADER = (By.XPATH, "//*[@data-id='a8e7b90']//*[contains(text(), 'Life at Insider')]")  # Locator for "Life at Insider"
     SEE_ALL_TEAMS_BUTTON = (By.XPATH, "//a[contains(text(), 'See all teams')]")
     QA_TITLE = (By.XPATH, "//h3[contains(text(),'Quality Assurance')]")
-
+    
+    # //*[@id='career-our-location']//*[contains(@class, 'Our Locations')]
+    # LOCATIONS_HEADER = (By.XPATH, "//*[@id='career-our-location']//h3[contains(@class, 'col-12 col-md-6')]")  # Locator for "Our Locations"
     def is_locations_visible(self):
         """Check if the 'Our Locations' section header is visible after scrolling."""
         self.scroll_to_element(self.LOCATIONS_HEADER)  # Scroll to the 'Our Locations' section header
